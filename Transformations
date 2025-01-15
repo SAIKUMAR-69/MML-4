@@ -54,7 +54,6 @@ h_shear = original_triangle @ horizontal_shear.T
 v_shear = original_triangle @ vertical_shear.T
 scaled_triangle = original_triangle @ dilation.T
 rotated_90 = original_triangle @ rotation_90.T
-affine_triangle = original_triangle @ affine.T
 
 # Set up subplots (1 row, 12 columns for each transformation)
 fig, axes = plt.subplots(3, 4, figsize=(20, 15))
