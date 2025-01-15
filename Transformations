@@ -1,0 +1,97 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define the vertices of the original triangle
+original_triangle = np.array([[1, 2], [2, 8], [3, 2], [1, 2]])  # Close the triangle by repeating the first vertex
+
+# Create transformation matrices for each transformation
+
+# Reflection over x-axis
+reflect_x = np.array([[1, 0], [0, -1]])
+
+# Reflection over y-axis
+reflect_y = np.array([[-1, 0], [0, 1]])
+
+# Reflection over origin
+reflect_origin = np.array([[-1, 0], [0, -1]])
+
+# Reflection over line y = x
+reflect_xy = np.array([[0, 1], [1, 0]])
+
+# Reflection over line y = -x
+reflect_x_neg_y = np.array([[0, -1], [-1, 0]])
+
+# Horizontal Expansion (scale x by a factor of 2)
+horizontal_expansion = np.array([[2, 0], [0, 1]])
+
+# Vertical Expansion (scale y by a factor of 2)
+vertical_expansion = np.array([[1, 0], [0, 2]])
+
+# Horizontal Shear (shear in x-direction)
+horizontal_shear = np.array([[1, 1], [0, 1]])
+
+# Vertical Shear (shear in y-direction)
+vertical_shear = np.array([[1, 0], [1, 1]])
+
+# Dilation (uniform scaling by 2)
+dilation = np.array([[2, 0], [0, 2]])
+
+# Rotation by 90 degrees
+rotation_90 = np.array([[0, -1], [1, 0]])
+
+# Affine Transformation (Shear and scale)
+affine = np.array([[1, 0.5], [0.2, 1]])
+
+# Apply transformations
+reflected_x = original_triangle @ reflect_x.T
+reflected_y = original_triangle @ reflect_y.T
+reflected_origin = original_triangle @ reflect_origin.T
+reflected_xy = original_triangle @ reflect_xy.T
+reflected_x_neg_y = original_triangle @ reflect_x_neg_y.T
+h_expansion = original_triangle @ horizontal_expansion.T
+v_expansion = original_triangle @ vertical_expansion.T
+h_shear = original_triangle @ horizontal_shear.T
+v_shear = original_triangle @ vertical_shear.T
+scaled_triangle = original_triangle @ dilation.T
+rotated_90 = original_triangle @ rotation_90.T
+affine_triangle = original_triangle @ affine.T
+
+# Set up subplots (1 row, 12 columns for each transformation)
+fig, axes = plt.subplots(3, 4, figsize=(20, 15))
+
+# Plot each transformation in a separate subplot
+transformations = [
+    ("Reflection over x-axis", reflected_x),
+    ("Reflection over y-axis", reflected_y),
+    ("Reflection over origin", reflected_origin),
+    ("Reflection over y=x", reflected_xy),
+    ("Reflection over y=-x", reflected_x_neg_y),
+    ("Horizontal Expansion", h_expansion),
+    ("Vertical Expansion", v_expansion),
+    ("Horizontal Shear", h_shear),
+    ("Vertical Shear", v_shear),
+    ("Dilation (Scaling)", scaled_triangle),
+    ("Rotation by 90 degrees", rotated_90),
+    ("Affine Transformation", affine_triangle),
+]
+
+# Loop through each transformation and its name to plot
+for ax, (name, triangle) in zip(axes.flatten(), transformations):
+    # Plot the original triangle (blue)
+    ax.plot(original_triangle[:, 0], original_triangle[:, 1], 'b-', label="Original Triangle")
+    
+    # Plot the transformed triangle with a distinct color/style
+    ax.plot(triangle[:, 0], triangle[:, 1], label=name)
+    
+    # Set plot properties
+    ax.set_title(name)
+    ax.set_xlim(-10, 10)
+    ax.set_ylim(-10, 10)
+    ax.axhline(0, color='black', linewidth=0.5)
+    ax.axvline(0, color='black', linewidth=0.5)
+    ax.grid(True)
+    ax.set_aspect('equal')
+    ax.legend()
+
+plt.tight_layout()
+plt.show()
