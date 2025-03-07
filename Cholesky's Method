@@ -1,0 +1,25 @@
+import numpy as np
+import sympy as sp
+
+A = sp.Matrix([[25, 15, -5], [15, 18, 0], [-5, 0, 11]])
+B = sp.Matrix([[35,33,6]]).T
+l11, l21, l22, l31, l32, l33 = sp.symbols('l11 l21 l22 l31 l32 l33')
+
+L = sp.Matrix([[l11, 0, 0],[l21, l22, 0],[l31, l32, l33]])
+L_T = L.T
+S = L * L_T
+
+equations = [S[i, j] - A[i, j] for i in range(3) for j in range(i, 3)]  
+solutions = sp.solve(equations, (l11, l21, l22, l31, l32, l33))
+
+L_updated = L
+i=0
+for var in [l11, l21, l22, l31, l32, l33]:
+    L_updated = L_updated.subs(var, solutions[7][i])
+    i=i+1
+L_updated_T=L_updated.T
+
+Y=L_updated.LUsolve(B)
+X=L_updated_T.LUsolve(Y)
+print("\n X values")
+sp.pprint(X)
