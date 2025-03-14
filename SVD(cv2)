@@ -1,29 +1,21 @@
-import numpy as np
 import cv2
+import numpy as np
 import matplotlib.pyplot as plt
 
+img = r"C:\Users\Admin\Downloads\imagesbmw.jpg"
+A = cv2.imread(img, 0)
 
-image = cv2.imread('imagesbmw.jpg')
-gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-U, S, Vt = np.linalg.svd(gray_image, full_matrices=False)
+u, s, vt = np.linalg.svd(A, full_matrices=False)
+k = int(input("Enter the value for compression k:"))
 
-def reconstruct_image(U, S, Vt, k):
-    S_k = np.diag(S[:k])
-    U_k = U[:, :k]
-    Vt_k = Vt[:k, :]
-    reconstructed_image = np.dot(U_k, np.dot(S_k, Vt_k))
-    return reconstructed_image
-k = 30
+compressed = np.dot(u[:, :k], np.dot(np.diag(s[:k]), vt[:k, :]))
 
-compressed_image = reconstruct_image(U, S, Vt, k)
-fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+plt.imshow(A, cmap='gray')
+plt.title(f"Image ")
+plt.axis("off")
+plt.show()
 
-ax[0].imshow(gray_image, cmap='gray')
-ax[0].set_title("Original Image")
-ax[0].axis('off')
-
-ax[1].imshow(compressed_image, cmap='gray')
-ax[1].set_title(f"Compressed Image (k={k})")
-ax[1].axis('off')
-
+plt.imshow(compressed, cmap='gray')
+plt.title(f"Compressed Image (k = {k})")
+plt.axis("off")
 plt.show()
